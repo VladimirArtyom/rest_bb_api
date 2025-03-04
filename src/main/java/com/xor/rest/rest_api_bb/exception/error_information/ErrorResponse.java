@@ -6,12 +6,18 @@ import java.time.LocalDateTime;
 
 @Getter
 public abstract class ErrorResponse {
-    private String message;
-    private LocalDateTime timeStamp;
+    private final String message;
+    private final LocalDateTime timeStamp;
+    private final int status;
+    private final String path;
 
-    public ErrorResponse(final String message, final LocalDateTime timeStamp) {
+    public ErrorResponse(final String message,
+                         final LocalDateTime timeStamp,
+                         final String path,
+                         final int status) {
         this.message = message;
         this.timeStamp = timeStamp;
+        this.path = path;
+        this.status = status;
     }
-
 }

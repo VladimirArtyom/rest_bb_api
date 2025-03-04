@@ -70,6 +70,7 @@ public class PostDAO implements IPostDAO {
 
     @Override
     public Post getPostById(String id) {
+
         String query = "SELECT p from Post p WHERE p.id = :id";
         TypedQuery<Post> typedQuery = this.entityManager.createQuery(query, Post.class);
         typedQuery.setParameter("id", id);
