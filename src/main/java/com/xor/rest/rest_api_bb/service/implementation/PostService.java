@@ -1,11 +1,18 @@
 package com.xor.rest.rest_api_bb.service.implementation;
 
 import com.xor.rest.rest_api_bb.entity.Post;
-import com.xor.rest.rest_api_bb.payload.PostDTO;
-import com.xor.rest.rest_api_bb.repository.implementation.PostDAO;
+import com.xor.rest.rest_api_bb.payload.interfaces.IPaginationResponse;
+import com.xor.rest.rest_api_bb.payload.post.PostDTO;
+import com.xor.rest.rest_api_bb.repository.interfaces.IPostDAO;
+import com.xor.rest.rest_api_bb.repository.interfaces.IPostDAOJPA;
 import com.xor.rest.rest_api_bb.service.interfaces.IPostService;
+import com.xor.rest.rest_api_bb.utils.constant.post.PostConstants;
 import com.xor.rest.rest_api_bb.utils.post_mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +20,17 @@ import java.util.List;
 @Service
 public class PostService implements IPostService {
 
-    private PostDAO postRepository;
+    private IPostDAO postRepository;
+    private IPostDAOJPA postRepositoryJPA;
     private PostMapper postMapper;
 
     @Autowired
-    public PostService(PostDAO postRepository,
+    public PostService(IPostDAO postRepository,
+                       IPostDAOJPA postRepositoryJPA,
                        PostMapper postMapper) {
         this.postRepository = postRepository;
         this.postMapper =  postMapper;
+        this.postRepositoryJPA = postRepositoryJPA;
     }
 
     @Override
@@ -49,12 +59,29 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostDTO> getAllPosts() {
-        List<Post> posts = this.postRepository.getAllPosts();
-        return posts.stream().map(ent_post -> this.postMapper.toDTO(ent_post)).toList();
+    public IPaginationResponse<PostDTO> getAllPosts(int pageNo, int pageSize,
+                                                    PostConstants sortBy, Sort.Direction sortDir) {
+        Sort sort = sortDir.name().equalsIgnoreCase(Sort.Direction.ASC.name()) ?
+                Sort.by(sortBy.name().toLowerCase(), PostConstants.ID.name().toLowerCase()).ascending() :
+                Sort.by(sortBy.name().toLowerCase(), PostConstants.ID.name().toLowerCase()).descending();
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Page<Post> posts = postRepositoryJPA.findAll(pageable);
+        List<PostDTO> contents = posts.stream().map(entity_post -> this.postMapper.toDTO(entity_post)).toList();
+        return setPaginationItem(posts, contents);
     }
 
 
+    private IPaginationResponse<PostDTO> setPaginationItem(Page<Post> posts, List<PostDTO> contents ) {
+        IPaginationResponse<PostDTO> sortie = new IPaginationResponse<PostDTO>();
+        sortie.setContent(contents);
+        sortie.setPageNo(posts.getNumber());
+        sortie.setPageSize(posts.getSize());
+        sortie.setTotalElements(posts.getTotalElements());
+        sortie.setTotalPages(posts.getTotalPages());
+        sortie.setLast(posts.isLast());
+        return sortie;
+    }
 }
 
 

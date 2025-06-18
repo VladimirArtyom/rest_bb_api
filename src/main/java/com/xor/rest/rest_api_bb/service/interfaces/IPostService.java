@@ -1,8 +1,9 @@
 package com.xor.rest.rest_api_bb.service.interfaces;
 
-import com.xor.rest.rest_api_bb.payload.PostDTO;
-
-import java.util.List;
+import com.xor.rest.rest_api_bb.payload.interfaces.IPaginationResponse;
+import com.xor.rest.rest_api_bb.payload.post.PostDTO;
+import com.xor.rest.rest_api_bb.utils.constant.post.PostConstants;
+import org.springframework.data.domain.Sort;
 
 public interface IPostService {
 
@@ -11,7 +12,7 @@ public interface IPostService {
     PostDTO getPostById(String id);
     void deletePostById(String id);
     PostDTO updatePost(PostDTO postDTO);
-    List<PostDTO> getAllPosts();
-
+    IPaginationResponse<PostDTO> getAllPosts(int pageNo, int pageSize,
+                                             PostConstants sortBy, Sort.Direction sortDir);
 
 }

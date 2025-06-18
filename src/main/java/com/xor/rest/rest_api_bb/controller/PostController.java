@@ -1,11 +1,15 @@
 package com.xor.rest.rest_api_bb.controller;
 
-import com.xor.rest.rest_api_bb.payload.PostDTO;
+import com.xor.rest.rest_api_bb.payload.interfaces.IPaginationResponse;
+import com.xor.rest.rest_api_bb.payload.post.PostDTO;
 import com.xor.rest.rest_api_bb.payload.response.ApiResponse;
 import com.xor.rest.rest_api_bb.service.implementation.PostService;
+import com.xor.rest.rest_api_bb.utils.constant.post.PostConstants;
+import com.xor.rest.rest_api_bb.utils.constant.post.PostEnumMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +28,22 @@ public class PostController {
         this.postService = postService;
     }
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PostDTO>>> getPosts() {
-        logger.error("ngntd");
-        List<PostDTO> posts = this.postService.getAllPosts();
-        ApiResponse<List<PostDTO>> api = new ApiResponse<>("Success", HttpStatus.OK.value(), "posts", posts);
+    public ResponseEntity<ApiResponse<IPaginationResponse<PostDTO>>> getPosts(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "1", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        PostEnumMapper mapper = new PostEnumMapper();
+        // Needs to do validation in here
+
+        //
+        Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        IPaginationResponse<PostDTO> posts = this.postService.getAllPosts(pageNo, pageSize,
+                                             mapper.mapToEnum(sortBy), direction);
+
+        ApiResponse<IPaginationResponse<PostDTO>> api = new ApiResponse<>("Success", HttpStatus.OK.value(), "posts", posts);
         return new ResponseEntity<>(api, HttpStatus.OK);
     }
     @GetMapping("/{id}")

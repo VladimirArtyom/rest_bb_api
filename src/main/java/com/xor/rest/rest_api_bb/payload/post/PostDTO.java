@@ -1,4 +1,4 @@
-package com.xor.rest.rest_api_bb.payload;
+package com.xor.rest.rest_api_bb.payload.post;
 
 import lombok.*;
 
@@ -10,5 +10,4 @@ public class PostDTO {
     private String title;
     private String content;
     private String description;
-
 }

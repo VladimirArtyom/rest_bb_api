@@ -1,18 +1,15 @@
 package com.xor.rest.rest_api_bb.repository.interfaces;
 
 import com.xor.rest.rest_api_bb.entity.Post;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IPostDAO {
 
     Post createPost(Post post);
 
-    List<Post> getAllPosts();
     Post getPostById(String id);
 
     void deletePostById(String id);
 
     Post updatePost(String id, Post newPost);
-
 }

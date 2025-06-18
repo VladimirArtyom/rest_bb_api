@@ -1,7 +1,7 @@
 package com.xor.rest.rest_api_bb.utils.post_mapper;
 
 import com.xor.rest.rest_api_bb.entity.Post;
-import com.xor.rest.rest_api_bb.payload.PostDTO;
+import com.xor.rest.rest_api_bb.payload.post.PostDTO;
 import org.springframework.stereotype.Component;
 
 @Component

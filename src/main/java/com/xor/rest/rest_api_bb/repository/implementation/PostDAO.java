@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -60,13 +59,6 @@ public class PostDAO implements IPostDAO {
     }
 
     // Transactional methods end
-
-    @Override
-    public List<Post> getAllPosts() {
-        String query = "SELECT p from Post p";
-        TypedQuery<Post> typedQuery = entityManager.createQuery(query, Post.class);
-        return typedQuery.getResultList();
-    }
 
     @Override
     public Post getPostById(String id) {
