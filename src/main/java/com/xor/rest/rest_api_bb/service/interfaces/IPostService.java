@@ -6,7 +6,6 @@ import com.xor.rest.rest_api_bb.utils.constant.post.PostConstants;
 import org.springframework.data.domain.Sort;
 
 public interface IPostService {
-
     // Needs DTO to communicate with external!
     PostDTO createPost(PostDTO postDTO);
     PostDTO getPostById(String id);
@@ -14,5 +13,4 @@ public interface IPostService {
     PostDTO updatePost(PostDTO postDTO);
     IPaginationResponse<PostDTO> getAllPosts(int pageNo, int pageSize,
                                              PostConstants sortBy, Sort.Direction sortDir);
-
 }

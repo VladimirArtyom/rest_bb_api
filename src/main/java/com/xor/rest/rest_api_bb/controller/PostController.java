@@ -6,6 +6,7 @@ import com.xor.rest.rest_api_bb.payload.response.ApiResponse;
 import com.xor.rest.rest_api_bb.service.implementation.PostService;
 import com.xor.rest.rest_api_bb.utils.constant.post.PostConstants;
 import com.xor.rest.rest_api_bb.utils.constant.post.PostEnumMapper;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,8 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<PostDTO>> createPost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<ApiResponse<PostDTO>> createPost(
+            @Valid @RequestBody PostDTO postDTO) {
         postDTO = this.postService.createPost(postDTO);
 
         ApiResponse<PostDTO> api =  new ApiResponse<PostDTO>("Success", HttpStatus.CREATED.value(),"post", postDTO);
@@ -65,7 +67,8 @@ public class PostController {
     }
 
     @PutMapping
-    public ResponseEntity<ApiResponse<PostDTO>> updatePost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<ApiResponse<PostDTO>> updatePost(
+            @Valid @RequestBody PostDTO postDTO) {
         postDTO = this.postService.updatePost(postDTO);
         ApiResponse<PostDTO> api = new ApiResponse<PostDTO>("Success", HttpStatus.OK.value(), "post", postDTO);
         return new ResponseEntity<>(api, HttpStatus.OK);

@@ -3,8 +3,8 @@ package com.xor.rest.rest_api_bb.service.implementation;
 import com.xor.rest.rest_api_bb.entity.Post;
 import com.xor.rest.rest_api_bb.payload.interfaces.IPaginationResponse;
 import com.xor.rest.rest_api_bb.payload.post.PostDTO;
-import com.xor.rest.rest_api_bb.repository.interfaces.IPostDAO;
-import com.xor.rest.rest_api_bb.repository.interfaces.IPostDAOJPA;
+import com.xor.rest.rest_api_bb.repository.interfaces.post.IPostDAO;
+import com.xor.rest.rest_api_bb.repository.interfaces.post.IPostDAOJPA;
 import com.xor.rest.rest_api_bb.service.interfaces.IPostService;
 import com.xor.rest.rest_api_bb.utils.constant.post.PostConstants;
 import com.xor.rest.rest_api_bb.utils.post_mapper.PostMapper;
@@ -43,6 +43,7 @@ public class PostService implements IPostService {
     @Override
     public PostDTO getPostById(String id) {
         Post post = this.postRepository.getPostById(id);
+        System.out.println(post.getComments());
         return this.postMapper.toDTO(post);
     }
 

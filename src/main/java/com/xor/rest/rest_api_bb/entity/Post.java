@@ -4,7 +4,10 @@ package com.xor.rest.rest_api_bb.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Set;
 
 
 @Entity
@@ -13,7 +16,8 @@ import lombok.Data;
         uniqueConstraints = @UniqueConstraint(columnNames = {"title"})
 )
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class Post {
 
@@ -38,6 +42,11 @@ public class Post {
     @Column(name="description", nullable = false)
     private String description;
 
-
-
+    @OneToMany(
+            targetEntity = Comment.class,
+            orphanRemoval = true,
+            mappedBy = "post",
+            cascade = CascadeType.ALL
+    )
+    private Set<Comment> comments;
 }

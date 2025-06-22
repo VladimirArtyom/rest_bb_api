@@ -1,7 +1,7 @@
-package com.xor.rest.rest_api_bb.repository.implementation;
+package com.xor.rest.rest_api_bb.repository.implementation.post;
 
 import com.xor.rest.rest_api_bb.entity.Post;
-import com.xor.rest.rest_api_bb.repository.interfaces.IPostDAO;
+import com.xor.rest.rest_api_bb.repository.interfaces.post.IPostDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
@@ -63,7 +63,7 @@ public class PostDAO implements IPostDAO {
     @Override
     public Post getPostById(String id) {
 
-        String query = "SELECT p from Post p WHERE p.id = :id";
+        String query = "SELECT p from Post p LEFT JOIN Comment c ON c.post.id = p.id WHERE p.id=:id";
         TypedQuery<Post> typedQuery = this.entityManager.createQuery(query, Post.class);
         typedQuery.setParameter("id", id);
         return typedQuery.getSingleResult();
