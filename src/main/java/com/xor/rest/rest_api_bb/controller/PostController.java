@@ -1,5 +1,6 @@
 package com.xor.rest.rest_api_bb.controller;
 
+import com.xor.rest.rest_api_bb.exception.http_exception.InternalServerErrorException;
 import com.xor.rest.rest_api_bb.payload.interfaces.IPaginationResponse;
 import com.xor.rest.rest_api_bb.payload.post.PostDTO;
 import com.xor.rest.rest_api_bb.payload.response.ApiResponse;
@@ -38,7 +39,6 @@ public class PostController {
         PostEnumMapper mapper = new PostEnumMapper();
         // Needs to do validation in here
 
-        //
         Sort.Direction direction = sortDir.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 
         IPaginationResponse<PostDTO> posts = this.postService.getAllPosts(pageNo, pageSize,

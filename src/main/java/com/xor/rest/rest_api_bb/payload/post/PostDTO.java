@@ -4,8 +4,6 @@ import com.xor.rest.rest_api_bb.entity.Comment;
 import com.xor.rest.rest_api_bb.payload.comment.CommentDTO;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Set;

@@ -1,6 +1,5 @@
 package com.xor.rest.rest_api_bb.exception;
 
-import com.xor.rest.rest_api_bb.controller.PostController;
 import com.xor.rest.rest_api_bb.exception.error_information.ClientErrorResponse;
 import com.xor.rest.rest_api_bb.exception.error_information.ErrorResponse;
 import com.xor.rest.rest_api_bb.exception.http_exception.BadRequestException;
@@ -13,12 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
 
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseEntity<ErrorResponse> resourceNotFoundErrorHandler(ResourceNotFoundException e, HttpServletRequest req) {
@@ -57,5 +57,16 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(clientError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+    // Global Exception
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> globalExceptionHandler(Exception e, HttpServletRequest req) {
+        String uri = req.getRequestURI();
+        ErrorResponse clientError = new ErrorResponse(
+                e.getMessage(),
+                LocalDateTime.now(),
+                uri,
+                HttpStatus.INTERNAL_SERVER_ERROR.value()
+        );
+        return new ResponseEntity<ErrorResponse>(clientError, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
