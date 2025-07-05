@@ -41,4 +41,23 @@ public class UserController {
         ApiResponse<UserDTO> api = new ApiResponse<>("Success", HttpStatus.OK.value(), "user", newUser);
         return new ResponseEntity<>(api, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<String>> deleteUserById(
+            @PathVariable Long id
+    ){
+        this.userService.deleteUser(id);
+        ApiResponse<String> api = new ApiResponse<>("user has been deleted succesfully", HttpStatus.OK.value(),"user", "The user was deleted");
+        return new ResponseEntity<>(api, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<UserDTO>>  updateUser(
+            @PathVariable Long id,
+            @RequestBody UserDTO userDTO
+    ) {
+        UserDTO toReturn = this.userService.updateUser(id, userDTO);
+        ApiResponse<UserDTO> api = new ApiResponse<>("Success", HttpStatus.OK.value(), "user", toReturn);
+        return new ResponseEntity<>(api, HttpStatus.OK);
+    }
 }

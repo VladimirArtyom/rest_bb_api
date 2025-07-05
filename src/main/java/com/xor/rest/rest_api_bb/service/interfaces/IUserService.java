@@ -8,6 +8,6 @@ public interface IUserService {
     UserDTO getUserByUsername(String username);
     UserDTO getUserById(Long id);
     UserDTO createUser(UserDTO user);
-    Boolean deleteUser(String id);
-    // update plus tard
+    Boolean deleteUser(Long id);
+    UserDTO updateUser(long id, UserDTO user);
 }

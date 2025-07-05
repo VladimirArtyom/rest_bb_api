@@ -1,6 +1,5 @@
 package com.xor.rest.rest_api_bb.payload.account;
 
-
 import com.xor.rest.rest_api_bb.utils.generic.InputValidator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

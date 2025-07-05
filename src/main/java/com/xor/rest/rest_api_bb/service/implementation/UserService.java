@@ -9,6 +9,7 @@ import com.xor.rest.rest_api_bb.repository.interfaces.role.IRoleDAO;
 import com.xor.rest.rest_api_bb.repository.interfaces.user.IUserDAO;
 import com.xor.rest.rest_api_bb.service.interfaces.IUserService;
 import com.xor.rest.rest_api_bb.utils.user_mapper.UserMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -71,10 +72,28 @@ public class UserService implements IUserService {
         throw new InternalServerErrorException("Cannot create user");
     }
 
+    @Override
+    @Transactional
+    public Boolean deleteUser(Long id) {
 
+        boolean isDeleted = this.userRepository.deleteUserById(id);
+        if (!isDeleted) {
+            throw new InternalServerErrorException("Cannot delete the user");
+        }
+        return true;
+    }
 
     @Override
-    public Boolean deleteUser(String id) {
-        return null;
+    @Transactional
+    public UserDTO updateUser(long id, UserDTO userDTO) {
+        User enUser = this.userMapper.toEntity(userDTO);
+        Optional<User> user = this.userRepository.updateUser(id, enUser);
+        if (user.isEmpty()) {
+            // FIX ERROR !
+            throw new InternalServerErrorException("The user is not found");
+        }
+
+        return this.userMapper.toDTO(user.get());
     }
+
 }

@@ -2,6 +2,7 @@ package com.xor.rest.rest_api_bb.repository.implementation.user;
 
 import com.xor.rest.rest_api_bb.entity.Role;
 import com.xor.rest.rest_api_bb.entity.User;
+import com.xor.rest.rest_api_bb.exception.http_exception.InternalServerErrorException;
 import com.xor.rest.rest_api_bb.repository.interfaces.user.IUserDAO;
 import com.xor.rest.rest_api_bb.utils.generic.DatabaseHelper;
 import jakarta.persistence.EntityManager;
@@ -86,10 +87,10 @@ public class UserDAO implements IUserDAO {
 
     @Override
     @Transactional
-    public Boolean deleteUserById(String id) {
-        String query = "DELETE FROM users WHERE id=:p_id";
-        TypedQuery<Long> res = this.entityManager.createQuery(query, Long.class);
-        Long out = res.setParameter("p_id", id).getSingleResult();
+    public Boolean deleteUserById(Long id) {
+        String query = "DELETE FROM User WHERE id=:p_id";
+        Query res = this.entityManager.createQuery(query );
+        int out = res.setParameter("p_id", id).executeUpdate();
         return out > 0;
     }
 
@@ -102,8 +103,30 @@ public class UserDAO implements IUserDAO {
 
 
     @Override
-    public Optional<User> updateUser(String userId, User newUser) {
-        return Optional.empty();
+    public Optional<User> updateUser(Long userId, User newUser) {
+        User oldUser = findById(userId).orElseThrow( () -> new InternalServerErrorException("Yeah pal not working"));
+
+        String query = "UPDATE users as u " +
+                "SET u.name=:p_name, " +
+                "u.username=:p_username, "+
+                "u.email=:p_email, " +
+                "u.password=:p_password " +
+                "WHERE u.id=:p_id";
+        Query res = this.entityManager.createNativeQuery(query);
+
+        List<String> listOfKeys = List.of("p_name", "p_username",
+                                          "p_email","p_password",
+                                          "p_id");
+        List<Object> listOfValues = List.of(newUser.getName(), newUser.getUsername(),
+                                            newUser.getEmail(), newUser.getPassword(),
+                                            oldUser.getId());
+        res = DatabaseHelper.set_parameters(res, listOfKeys, listOfValues);
+        int rows = res.executeUpdate();
+        if (rows != 1 ){
+            throw new InternalServerErrorException("Cannot update the given user data");
+        }
+
+        return findById(oldUser.getId());
     }
 
 

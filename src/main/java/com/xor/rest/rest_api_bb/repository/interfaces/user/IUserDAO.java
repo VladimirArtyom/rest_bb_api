@@ -18,11 +18,11 @@ public interface IUserDAO {
 
     Boolean isExistByEmail(String email);
 
-    Boolean deleteUserById(String id);
+    Boolean deleteUserById(Long id);
 
     Optional<User> createUser(User user);
 
-    Optional<User> updateUser(String userId, User newUser);
+    Optional<User> updateUser(Long userId, User newUser);
 
     // NATIVE SQL For Educational usage only
     Optional<User> createUserNativeSQL(User user);
